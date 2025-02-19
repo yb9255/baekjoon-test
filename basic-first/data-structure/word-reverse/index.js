@@ -42,3 +42,32 @@ for (const sentence of sentences) {
 }
 
 console.log(answer.trim());
+
+// 풀이 3
+
+const iter = Number(input.shift());
+answer = [];
+let stack = '';
+
+for (let i = 0; i < iter; i++) {
+  let reverse = '';
+  const sentence = input[i];
+
+  for (let j = sentence.length - 1; j >= 0; j--) {
+    const char = sentence[j];
+
+    if (char === ' ') {
+      stack = `${reverse} ${stack}`;
+      reverse = '';
+      continue;
+    }
+
+    reverse += char;
+  }
+
+  stack = `${reverse} ${stack}`;
+  answer.push(stack);
+  stack = '';
+}
+
+console.log(answer.join('\n'));
