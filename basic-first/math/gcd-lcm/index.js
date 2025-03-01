@@ -32,6 +32,8 @@ const getGcd = ([num1, num2]) => {
 };
 
 // 최소공배수 = num1 * num2 / 최대공약수
+// 두 수를 곱한 것은 배수는 맞으나, 두 수 모두 가지고 있는 최대공약수가 같이 곱해짐.
+// 따라서 두 수를 곱하고 최대공약수로 나눠야 최소공배수가 나옴.
 const getLcm = ([num1, num2]) => {
   return (num1 * num2) / getGcd(input);
 };
