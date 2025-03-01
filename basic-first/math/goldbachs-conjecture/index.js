@@ -77,3 +77,41 @@ for (let i = 0; i < input.length; i++) {
 }
 
 console.log(answer.join('\n'));
+
+// 2번 풀이
+
+const answer2 = [];
+const maxNum2 = Math.max(...input);
+
+const primNumberMap = Array.from({ length: maxNum2 + 1 }, () => true);
+primNumberMap[0] = primNumberMap[1] = false;
+
+// get-all-prime-numbers 참조
+for (let i = 2; i <= Math.sqrt(maxNum2); i++) {
+  if (primNumberMap[i]) {
+    for (let j = i * i; j <= maxNum2; j += i) {
+      primNumberMap[j] = false;
+    }
+  }
+}
+
+// 1. 각 숫자만큼 for문을 순회한다.
+// 2. for문 내 현재 index가 소수이면, 현재 숫자 - index(diff)를 구한다.
+// 3. diff도 소수이면, 정답에 push한다.
+
+for (let i = 0; i < input.length; i++) {
+  const curNum = input[i];
+
+  for (let j = 0; j <= curNum; j++) {
+    if (primNumberMap[j]) {
+      const diff = curNum - j;
+
+      if (primNumberMap[diff]) {
+        answer2.push(`${curNum} = ${j} + ${diff}`);
+        break;
+      }
+    }
+  }
+}
+
+console.log(answer2.join('\n'));
