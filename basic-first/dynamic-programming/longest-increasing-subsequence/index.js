@@ -1,14 +1,35 @@
 const input = require('fs').readFileSync('input.txt').toString().split('\n');
 
-const subsequenceLength = +input[0];
-const subsequence = input[1].split(' ').map(Number);
+const sequenceLength = +input[0];
+const sequence = input[1].split(' ').map(Number);
 
-// 0. 부분수열은 기본적으로 수열의 순서를 따라가야 하지만
-// 값을 덮어쓰는 경우는 순서를 따라가지 않을 수 있음
-// e.g.) 현재 수열이 3, 5, 7인데 2를 만나면, 2, 5, 7로 최소값을 덮어씌우는게 가능.
+/**
+ * 점화식
+ * 1. 길이가 n인 부분 수열보다 긴 부분 수열을 찾으려면, 마지막 n 자리에 오는 숫자가 가장
+ * 작아야 더 긴 부분 수열을 만들 수 있다.
+ * e.g) 1,2인 부분 수열은 1,3인 부분수열보다 한자리만큼 더 길 수 있다. 1,2의 경우 뒤에
+ * 숫자 3이 올 수 있지만, 1,3은 뒤에 숫자 4부터 올 수 있기 때문
+ *
+ * 2. 1에 의거하여, lis[i]에 i + 1의 길이를 가진 부분 수열의 마지막 값 중 가장 작은 값만 기록하면 그
+ * 길이가 부분 수열의 최대 길이가 됨
+ * e.g.) lis[0] == 1의 길이를 가진 부분 수열 중 마지막 값이 가장 작은 경우
+ * lis[1] == 2의 길이를 가진 부분 수열 중 마지막 값이 가장 작은 경우
+ *
+ * 3. 2를 구하기 위해 수열을 순회하기 시작한다.
+ * 4. lis에 값이 없다면, 현재 수열의 값을 push한다.
+ *
+ * 5. lis의 마지막 값보다 현재 값이 더 크다면, 마지막 부분수열 길이에 현재 값을 붙일 수 있으므로
+ * 현재 값을 push한다.
+ *
+ * 6. lis의 길이가 0보다 길고 마지막 값보다 작다면, 가장 긴 부분수열에 붙일 수 있는 값은 아니고
+ * 더 작은 부분수열의 값으로 들어갈 수 있다는 의미이다. 이 때, 이미 해당 값이 특정 길이의 최소값으로
+ * 지정되었을 수 있으므로 이진 탐색으로 lis 내 현재 값이 있을 위치를 찾아서 그 인덱스에 배치한다.
+ *
+ * 7. lis의 길이를 리턴한다.
+ */
 
-// 1. subsequence index를 0부터 순회한다. (subsequence[i]와 같은 값을 num이라고 한다.)
-// 2. 만약 lis(Longest Increasing Subsequence)의 길이가 0이면, 값을 push한다.
+// 1. sequence index를 0부터 순회한다. (sequence[i]와 같은 값을 num이라고 한다.)
+// 2. 만약 lis(Longest Increasing sequence)의 길이가 0이면, 값을 push한다.
 // 3. 만약 lis 배열의 마지막 값보다 현재 num이 더 크다면, 값을 push한다.
 
 // 4. 2, 3에 둘 다 해당하지 않는다면, Binary Search(Divide and Conquer)를 시작한다.
@@ -42,8 +63,8 @@ const findPosition = (target) => {
   return right;
 };
 
-for (let i = 0; i <= subsequenceLength; i++) {
-  const num = subsequence[i];
+for (let i = 0; i <= sequenceLength; i++) {
+  const num = sequence[i];
 
   if (lis.length === 0 || lis[lis.length - 1] < num) {
     lis.push(num);
