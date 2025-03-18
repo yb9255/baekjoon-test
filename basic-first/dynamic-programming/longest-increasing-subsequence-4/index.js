@@ -4,16 +4,44 @@ const input = require('fs')
   .trim()
   .split('\n');
 
-const subsequenceLength = +input[0];
-const subsequence = input[1].split(' ').map(Number);
+const sequenceLength = +input[0];
+const sequence = input[1].split(' ').map(Number);
 
-// 0. 부분수열은 기본적으로 수열의 순서를 따라가야 하지만
-// 값을 덮어쓰는 경우는 순서를 따라가지 않을 수 있음
-// e.g.) 현재 수열이 3, 5, 7인데 2를 만나면, 2, 5, 7로 최소값을 덮어씌우는게 가능.
-
-// 1. lis의 길이를 구하는 용도로 binarySearch 함수를 구현
-// 2. lis의 위치를 추적하지 않고 길이를 담는 배열 lis 생성
-// 3. lis의 원본 인덱스를 저장하는 배열 lisIndices 생성
+/**
+ * 점화식
+ * 1. 길이가 n인 부분 수열보다 긴 부분 수열을 찾으려면, 마지막 n 자리에 오는 숫자가 가장
+ * 작아야 더 긴 부분 수열을 만들 수 있다.
+ * e.g) 1,2인 부분 수열은 1,3인 부분수열보다 한자리만큼 더 길 수 있다. 1,2의 경우 뒤에
+ * 숫자 3이 올 수 있지만, 1,3은 뒤에 숫자 4부터 올 수 있기 때문
+ *
+ * 2. 1에 의거하여, lis[i]에 i + 1의 길이를 가진 부분 수열의 마지막 값 중 가장 작은 값만 기록하면 그
+ * 길이가 부분 수열의 최대 길이가 됨
+ * e.g.) lis[0] == 1의 길이를 가진 부분 수열 중 마지막 값이 가장 작은 경우
+ * lis[1] == 2의 길이를 가진 부분 수열 중 마지막 값이 가장 작은 경우
+ *
+ * 3. 다만 2만 구하면 부분 수열의 실제 순서와 일치하지 않을 수 있으므로, lis를 구하면서
+ * 그 lis에 들어가는 값 앞에 위치한 값의 index와 lis에 들어가는 값 index를 구해 실제 인덱스를 추적한다.
+ *
+ * 4. 수열을 순회하기 시작한다.
+ *
+ * 5. lis에 값이 없다면, 현재 수열의 값을 push한다. 이 때, 현재 값의 index를 가지는 배열 lisIndices에
+ * 현재 수열의 index를 push, 현재 값보다 바로 앞의 값의 index를 구하는 parentIndices에는 -1을 push한다.
+ *
+ * 5. lis의 마지막 값보다 현재 값이 더 크다면, 마지막 부분수열 길이에 현재 값을 붙일 수 있으므로
+ * 현재 값을 push하며, parentIndices에는 listIndices의 마지막 값을 push,
+ * 현재 값의 index를 listIndices에 push한다.
+ *
+ * 6. lis의 길이가 0보다 길고 마지막 값보다 작다면, 가장 긴 부분수열에 붙일 수 있는 값은 아니고
+ * 더 작은 부분수열의 값으로 들어갈 수 있다는 의미이다. 이 때, 이미 해당 값이 특정 길이의 최소값으로
+ * 지정되었을 수 있으므로 이진 탐색으로 lis 내 현재 값이 있을 위치를 찾아서 그 인덱스에 배치한다.
+ * 이 후 listIndices에도 이진 탐색으로 찾은 위치에 현재 index를 보관, parentIndices는 이진 탐색으로 찾은
+ * 위치보다 한칸 앞 listIndices에 있는 index를 push한다.
+ *
+ * 7. lis의 길이를 리턴한다.
+ * 8. lisIndices의 제일 마지막 인덱스의 값을 answer 배열에 푸시한다.
+ * 9. parentIndices 제일 마지막 인덱스에 있는 값을 추적하고, 그 값을 index로 가진 lisIndices 값을 추적한다.
+ * 10. 최종적으로 parentIndices의 값이 -1이 될때까지 백트래킹하고 그 결과를 answer에 담은 뒤, reverse해서 리턴한다.
+ */
 
 // 4. 만약 sequence의 i 인덱스에 있는 num이 부분수열에 포함된다면, 그 num의
 // 앞 포지션에 위치한 부분수열 숫자의 index를 기록하는 parent 배열 생성
@@ -49,8 +77,8 @@ const binarySearch = (targetNum) => {
   return right;
 };
 
-for (let i = 0; i < subsequenceLength; i++) {
-  const num = subsequence[i];
+for (let i = 0; i < sequenceLength; i++) {
+  const num = sequence[i];
 
   if (!lis.length) {
     parent[i] = -1;
@@ -72,7 +100,7 @@ let lastIndex = lisIndices[lisIndices.length - 1];
 const answer = [];
 
 while (lastIndex !== -1) {
-  answer.push(subsequence[lastIndex]);
+  answer.push(sequence[lastIndex]);
   lastIndex = parent[lastIndex];
 }
 
