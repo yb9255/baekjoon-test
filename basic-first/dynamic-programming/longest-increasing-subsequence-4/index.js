@@ -61,7 +61,7 @@ const sequence = input[1].split(' ').map(Number);
 
 const lis = [];
 const lisIndices = [];
-const parent = Array.from({ length: subsequenceLength }, () => -1);
+const parent = Array.from({ length: sequenceLength }, () => -1);
 
 const binarySearch = (targetNum) => {
   let left = 0;
@@ -105,3 +105,51 @@ while (lastIndex !== -1) {
 }
 
 console.log(lis.length + '\n' + answer.reverse().join(' '));
+
+const n = +input[0];
+const sequence2 = input[1].split(' ').map(Number);
+const answer2 = [];
+
+/** 기존 풀이에서 길이를 계산하는 배열 하나를 줄임. */
+
+const dp = [];
+const prev = Array(n).fill(-1);
+
+const binarySearch2 = (target) => {
+  let left = 0;
+  let right = dp.length - 1;
+
+  while (left < right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (sequence2[dp[mid]] >= target) right = mid;
+    else left = mid + 1;
+  }
+
+  return right;
+};
+
+for (let i = 0; i < n; i++) {
+  const num = sequence2[i];
+
+  if (!dp.length) {
+    prev[i] = -1;
+    dp.push(i);
+  } else if (sequence2[dp[dp.length - 1]] < num) {
+    prev[i] = dp[dp.length - 1];
+    dp.push(i);
+  } else {
+    const replaceIndex = binarySearch2(num);
+    dp[replaceIndex] = i;
+    prev[i] = replaceIndex > 0 ? dp[replaceIndex - 1] : -1;
+  }
+}
+
+let lastIndex2 = dp[dp.length - 1];
+
+while (lastIndex2 !== -1) {
+  answer2.push(sequence2[lastIndex2]);
+  lastIndex2 = prev[lastIndex2];
+}
+
+console.log(dp.length + '\n' + answer2.reverse().join(' '));
