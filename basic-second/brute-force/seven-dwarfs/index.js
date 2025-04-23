@@ -31,3 +31,19 @@ console.log(
     .sort((a, b) => a - b)
     .join('\n'),
 );
+
+/** filter 사용 */
+
+let result = [];
+
+for (let i = 0; i < 9; i++) {
+  for (let j = i + 1; j < 9; j++) {
+    if (totalSum - heights[i] - heights[j] === 100) {
+      result = heights.filter((_, idx) => idx !== i && idx !== j);
+      break;
+    }
+  }
+  if (result.length > 0) break;
+}
+
+console.log(result.sort((a, b) => a - b).join('\n'));
