@@ -33,11 +33,11 @@ const dx = [0, 0, -1, 1, 0, 0];
 const dz = [0, 0, 0, 0, -1, 1];
 
 const queue = [];
-let floorIdx = 0;
+let rowIdx = 0;
 
 for (let z = 0; z < H; z++) {
   for (let y = 0; y < N; y++) {
-    const row = input[floorIdx++];
+    const row = input[rowIdx++];
     board[z][y] = row;
 
     for (let x = 0; x < M; x++) {
