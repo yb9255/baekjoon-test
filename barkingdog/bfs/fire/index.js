@@ -74,9 +74,8 @@ for (let i = 0; i < N; i++) {
   }
 
   let result = 'IMPOSSIBLE';
-  let escaped = false;
 
-  while (sFront < sQueue.length && !escaped) {
+  while (sFront < sQueue.length) {
     const [y, x] = sQueue[sFront++];
 
     for (let dir = 0; dir < 4; dir++) {
@@ -85,7 +84,6 @@ for (let i = 0; i < N; i++) {
 
       if (ny < 0 || nx < 0 || ny >= N || nx >= M) {
         result = sDistance[y][x] + 1;
-        escaped = true;
         break;
       }
 
