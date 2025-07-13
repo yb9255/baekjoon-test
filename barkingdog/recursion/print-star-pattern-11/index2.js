@@ -14,18 +14,21 @@ const N = +require('fs')
  */
 
 const buildTree = (size) => {
-  if (size === 3) return ['  *  ', ' * * ', '*****'];
-
-  const prevTree = buildTree(size / 2);
-  const space = ' '.repeat(size / 2);
-  const newTree = [];
-
-  for (let line of prevTree) {
-    newTree.push(space + line + space);
+  if (size === 3) {
+    return ['  *  ', ' * * ', '*****'];
   }
 
-  for (let line of prevTree) {
-    newTree.push(line + ' ' + line);
+  const half = size / 2;
+  const prevTree = fractalStar(half);
+  const space = ' '.repeat(half);
+  const newTree = [];
+
+  for (const tree of prevTree) {
+    newTree.push(space + tree + space);
+  }
+
+  for (const tree of prevTree) {
+    newTree.push(tree + ' ' + tree);
   }
 
   return newTree;
