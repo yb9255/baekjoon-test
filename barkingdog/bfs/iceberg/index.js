@@ -21,26 +21,28 @@ const [[N, M], ...board] = require('fs')
  * 3. 계속 반복하며 year 증가
  */
 
-const dy = [-1, 1, 0, 0];
-const dx = [0, 0, -1, 1];
+const dy = [-1, 0, 1, 0];
+const dx = [0, 1, 0, -1];
+const visited = Array.from({ length: N }, () => Array(M).fill(0));
+let visitedStamp = 0;
 
-let years = 0;
+const isOOB = (y, x) => y < 0 || x < 0 || y >= N || x >= M;
 
-const isValidCoords = (y, x) => y >= 0 && x >= 0 && y < N && x < M;
-
-const meltingIcebergs = () => {
-  const nearZeroCountMap = Array.from({ length: N }, () => Array(M).fill(0));
+const melt = () => {
+  const meltMap = Array.from({ length: N }, () => Array(M).fill(0));
 
   for (let y = 0; y < N; y++) {
     for (let x = 0; x < M; x++) {
-      if (board[y][x] === 0) continue;
+      if (board[y][x] > 0) {
+        for (let dir = 0; dir < 4; dir++) {
+          const ny = y + dy[dir];
+          const nx = x + dx[dir];
 
-      for (let dir = 0; dir < 4; dir++) {
-        const ny = y + dy[dir];
-        const nx = x + dx[dir];
+          if (isOOB(ny, nx)) continue;
 
-        if (isValidCoords(ny, nx) && board[ny][nx] === 0) {
-          nearZeroCountMap[y][x]++;
+          if (board[ny][nx] === 0) {
+            meltMap[y][x]++;
+          }
         }
       }
     }
@@ -48,15 +50,21 @@ const meltingIcebergs = () => {
 
   for (let y = 0; y < N; y++) {
     for (let x = 0; x < M; x++) {
-      board[y][x] = Math.max(0, board[y][x] - nearZeroCountMap[y][x]);
+      if (board[y][x] > 0) {
+        board[y][x] = Math.max(0, board[y][x] - meltMap[y][x]);
+      }
     }
   }
 };
 
-const checkIcebergStatus = (visited) => {
+const checkIcebergSplit = () => {
+  let totalIcebergCoordsCount = 0;
+  let connectedIcebergCoordsCount = 0;
+
   let startY = -1;
   let startX = -1;
-  let totalIcebergCoordsCount = 0;
+
+  visitedStamp++;
 
   for (let y = 0; y < N; y++) {
     for (let x = 0; x < M; x++) {
@@ -69,43 +77,44 @@ const checkIcebergStatus = (visited) => {
   }
 
   if (totalIcebergCoordsCount === 0) {
-    console.log(totalIcebergCoordsCount);
+    console.log(0);
     process.exit();
   }
 
-  let connectedIcebergCoordsCount = 0;
   const queue = [[startY, startX]];
-  visited[startY][startX] = true;
   let front = 0;
+
+  visited[startY][startX] = visitedStamp;
+  connectedIcebergCoordsCount++;
 
   while (front < queue.length) {
     const [y, x] = queue[front++];
-    connectedIcebergCoordsCount++;
 
     for (let dir = 0; dir < 4; dir++) {
       const ny = y + dy[dir];
       const nx = x + dx[dir];
 
-      if (isValidCoords(ny, nx) && !visited[ny][nx] && board[ny][nx] > 0) {
-        visited[ny][nx] = true;
-        queue.push([ny, nx]);
-      }
+      if (isOOB(ny, nx)) continue;
+      if (visited[ny][nx] === visitedStamp) continue;
+      if (board[ny][nx] === 0) continue;
+
+      connectedIcebergCoordsCount++;
+      visited[ny][nx] = visitedStamp;
+      queue.push([ny, nx]);
     }
   }
 
   return totalIcebergCoordsCount !== connectedIcebergCoordsCount;
 };
 
+let year = 0;
+
 while (true) {
-  years++;
-  meltingIcebergs();
+  year++;
+  melt();
 
-  const isSplit = checkIcebergStatus(
-    Array.from({ length: N }, () => Array(M).fill(false)),
-  );
-
-  if (isSplit) {
-    console.log(years);
+  if (checkIcebergSplit()) {
+    console.log(year);
     break;
   }
 }
