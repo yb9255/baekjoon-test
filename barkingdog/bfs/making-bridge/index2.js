@@ -84,7 +84,7 @@ while (front < queue.length) {
     if (isOutOfBoundary(ny, nx)) continue;
     if (board[y][x] === board[ny][nx]) continue;
 
-    if (board[ny][nx] !== 0 && board[y][x] !== board[ny][nx]) {
+    if (board[ny][nx] !== 0) {
       answer = Math.min(answer, distance[y][x] + distance[ny][nx]);
     } else if (board[ny][nx] === 0) {
       board[ny][nx] = board[y][x];
