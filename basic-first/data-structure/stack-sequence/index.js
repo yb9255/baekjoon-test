@@ -1,41 +1,49 @@
-const fs = require('fs');
-const input = fs.readFileSync('./input.txt').toString().trim().split('\n');
+/** https://www.acmicpc.net/problem/1874 */
 
-const [iter, ...numbers] = input;
+const [N, ...nums] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map(Number);
 
-let answer = [];
-let stackNum = 1;
+/** Pseudo Code
+ * 1. 한 번 stack에 push한 숫자는 다시 넣을 수 없다.
+ *    - 예: 1, 2, 3을 push한 뒤 2를 다시 push하는 건 불가능.
+ *
+ * 2. 현재 stack에서 push된 최대 숫자보다 큰 타겟 숫자를 만나면:
+ *    - stack에 그 숫자가 나올 때까지 push를 반복한다.
+ *    - 그 후 pop하여 수열에 배치한다.
+ *
+ * 3. 현재 stack에서 push된 최대 숫자보다 작은 타겟 숫자를 만나면:
+ *    - 추가 push는 하지 않고 바로 pop 시도.
+ *    - pop한 값이 타겟 숫자와 같아야만 수열 배치 가능.
+ *
+ * 4. 만약 pop한 값이 타겟 숫자와 다르면:
+ *    - 숫자별로 딱 한번만 push할 수 있으므로, pop을 두 번 하는 경우 처음 pop한 숫자는 이 후 등장해도 누락된다.
+ *    - 즉, pop을 한번 했을 때 현재 top과 현재 숫자가 다르다면, 해당 수열은 만들 수 없다.
+ */
+
 const stack = [];
+const record = [];
 
-// 1. 한번 stack에 쌓인 숫자를 다시 넣지 못한다. (1,2,3까지 넣고 2를 다시 못넣음)
+let curMaxNum = 1;
 
-// 2. 현재 stack 횟수보다 큰 타겟 숫자의 수열 위치를 찾는 경우,
-// stack에 계속 숫자를 push해 순서가 될 때까지 반복한다.
-// 이후 pop해서 수열 배치를 완료한다.
+for (let i = 0; i < N; i++) {
+  const num = nums[i];
 
-// 3. 현재 stack 횟수보다 작은 타겟 숫자의 수열 위치를 찾는 경우,
-// 위의 push는 하지 않고 바로 pop해서 수열 배치가 가능한지 체크한다.
-
-// 4. pop한 값은 현재 stack에 남아있는 값 중 가장 큰 값인데 현재 타겟 숫자가
-// pop한 값과 일치하지 않는 경우, stack 내 모든 값은 타겟 숫자와 일치하지 않는다.
-// 즉, 해당 수열은 만들 수 없다.
-
-for (let i = 0; i < iter; i++) {
-  const num = +numbers[i];
-
-  while (stackNum <= num) {
-    stack.push(stackNum);
-    answer.push('+');
-    stackNum++;
+  while (curMaxNum <= num) {
+    stack.push(curMaxNum++);
+    record.push('+');
   }
 
-  const lastNumInStack = stack.pop();
-  answer.push('-');
+  const topNumInStack = stack.pop();
+  record.push('-');
 
-  if (lastNumInStack !== num) {
-    answer = ['NO'];
-    break;
+  if (topNumInStack !== num) {
+    console.log('NO');
+    process.exit();
   }
 }
 
-console.log(answer.join('\n'));
+console.log(record.join('\n'));
