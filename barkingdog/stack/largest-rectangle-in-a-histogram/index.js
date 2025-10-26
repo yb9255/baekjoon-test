@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/6549 */
+
 const cases = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -40,18 +42,18 @@ for (let i = 0; i < cases.length; i++) {
     const height = heights[j];
     let leftBound = j;
 
-    while (stack.length && stack[stack.length - 1].height >= height) {
-      const top = stack.pop();
-      const area = BigInt(top.height) * BigInt(j - top.leftBound);
+    while (stack.length && stack[stack.length - 1][0] >= height) {
+      const [topHeight, topLeftBound] = stack.pop();
+      const area = BigInt(topHeight) * BigInt(j - topLeftBound);
       maxArea = maxArea > area ? maxArea : area;
-      leftBound = top.leftBound;
+      leftBound = topLeftBound;
     }
 
-    stack.push({ height, leftBound });
+    stack.push([height, leftBound]);
   }
 
   while (stack.length) {
-    const { height, leftBound } = stack.pop();
+    const [height, leftBound] = stack.pop();
     const area = BigInt(height) * BigInt(N - leftBound);
     maxArea = maxArea > area ? maxArea : area;
   }
