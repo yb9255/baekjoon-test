@@ -1,5 +1,7 @@
-const [[N], targets] = require('fs')
-  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+/** https://www.acmicpc.net/problem/1021 */
+
+const [[N, M], targets] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input4.txt')
   .toString()
   .trim()
   .split('\n')
@@ -21,25 +23,26 @@ const [[N], targets] = require('fs')
  * 6. 제일 위의 값을 unshift한다.
  */
 
-const deque = Array.from({ length: N }, (_, index) => index + 1);
-let answer = 0;
+const deque = Array.from({ length: N }, (_, i) => i + 1);
+let count = 0;
 
-for (const target of targets) {
-  const idx = deque.indexOf(target);
+for (let i = 0; i < M; i++) {
+  const target = targets[i];
+  const targetIdx = deque.indexOf(target);
 
-  if (idx < deque.length - idx) {
-    for (let i = 0; i < idx; i++) {
+  if (targetIdx < deque.length - targetIdx) {
+    for (let j = 0; j < targetIdx; j++) {
       deque.push(deque.shift());
-      answer++;
+      count++;
     }
   } else {
-    for (let i = 0; i < deque.length - idx; i++) {
+    for (let k = 0; k < deque.length - targetIdx; k++) {
       deque.unshift(deque.pop());
-      answer++;
+      count++;
     }
   }
 
   deque.shift();
 }
 
-console.log(answer);
+console.log(count);
