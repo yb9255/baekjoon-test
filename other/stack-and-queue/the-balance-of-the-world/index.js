@@ -1,11 +1,12 @@
+/** https://www.acmicpc.net/problem/4949 */
+
 const input = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
   .split('\n');
 
-const answer = [];
-const brackets = ['(', ')', '[', ']'];
+const result = [];
 
 const map = {
   ')': '(',
@@ -16,19 +17,21 @@ for (let i = 0; i < input.length; i++) {
   const sentence = input[i];
   if (sentence === '.') break;
 
-  const stack = [];
-  let status = 'yes';
-
   if (!sentence.endsWith('.')) {
-    answer.push('no');
+    result.push('no');
     continue;
   }
 
-  const bracketList = sentence
-    .split('')
-    .filter((str) => brackets.includes(str));
+  const stack = [];
+  let status = 'yes';
 
-  for (const bracket of bracketList) {
+  const brackets = sentence
+    .split('')
+    .filter(
+      (char) => char === '(' || char === ')' || char === '[' || char === ']'
+    );
+
+  for (const bracket of brackets) {
     if (!map[bracket]) {
       stack.push(bracket);
     } else {
@@ -41,11 +44,9 @@ for (let i = 0; i < input.length; i++) {
     }
   }
 
-  if (stack.length !== 0) {
-    status = 'no';
-  }
+  if (stack.length) status = 'no';
 
-  answer.push(status);
+  result.push(status);
 }
 
-console.log(answer.join('\n'));
+console.log(result.join('\n'));
