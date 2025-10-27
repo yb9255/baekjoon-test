@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/5430 */
+
 const [T, ...cases] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -24,33 +26,18 @@ let line = 0;
 const answer = [];
 
 for (let t = 0; t < +T; t++) {
-  const commands = cases[line++].split('');
+  const commands = cases[line++];
   const N = +cases[line++];
   const raw = cases[line++];
-  const deque = [];
+  const deque = N === 0 ? [] : raw.slice(1, -1).split(',').map(Number);
 
-  let num = '';
-
-  for (let i = 1; i < raw.length - 1; i++) {
-    if (raw[i] === ',') {
-      deque.push(+num);
-      num = '';
-    } else {
-      num += raw[i];
-    }
-  }
-
-  if (num.length) {
-    deque.push(+num);
-  }
-
-  let isReversed = false;
-  let isError = false;
   let front = 0;
   let back = N;
+  let isReversed = false;
+  let isError = false;
 
-  for (const cmd of commands) {
-    if (cmd === 'R') {
+  for (const command of commands) {
+    if (command === 'R') {
       isReversed = !isReversed;
     } else {
       if (front >= back) {
@@ -58,8 +45,8 @@ for (let t = 0; t < +T; t++) {
         break;
       }
 
-      if (!isReversed) front++;
-      else back--;
+      if (isReversed) back--;
+      else front++;
     }
   }
 
