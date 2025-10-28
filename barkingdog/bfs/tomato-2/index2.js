@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/7569 */
+
 const [[M, N, H], ...input] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
