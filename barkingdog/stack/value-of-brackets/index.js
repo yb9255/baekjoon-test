@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/2504 */
+
 const brackets = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
