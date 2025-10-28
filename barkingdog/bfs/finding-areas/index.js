@@ -1,4 +1,6 @@
-const [[M, N, K], ...coords] = require('fs')
+/** https://www.acmicpc.net/problem/2583 */
+
+const [[N, M, K], ...coords] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
@@ -18,8 +20,8 @@ const [[M, N, K], ...coords] = require('fs')
  * 6. 최종적으로 구현 영역을 areas에 push한다.
  */
 
-const board = Array.from({ length: M }, () => Array(N).fill(0));
-const visited = Array.from({ length: M }, () => Array(N).fill(false));
+const board = Array.from({ length: N }, () => Array(M).fill(0));
+const visited = Array.from({ length: N }, () => Array(M).fill(false));
 
 for (let i = 0; i < K; i++) {
   const [x1, y1, x2, y2] = coords[i];
@@ -37,8 +39,8 @@ let count = 0;
 const dy = [-1, 1, 0, 0];
 const dx = [0, 0, -1, 1];
 
-for (let y = 0; y < M; y++) {
-  for (let x = 0; x < N; x++) {
+for (let y = 0; y < N; y++) {
+  for (let x = 0; x < M; x++) {
     if (board[y][x] === 1) continue;
     if (visited[y][x]) continue;
 
@@ -56,7 +58,7 @@ for (let y = 0; y < M; y++) {
         const ny = y + dy[dir];
         const nx = x + dx[dir];
 
-        if (ny < 0 || nx < 0 || ny >= M || nx >= N) continue;
+        if (ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
         if (visited[ny][nx]) continue;
         if (board[ny][nx] === 1) continue;
 
