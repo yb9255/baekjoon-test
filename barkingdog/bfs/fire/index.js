@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/5427 */
+
 const [N, ...input] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -75,7 +77,7 @@ for (let i = 0; i < N; i++) {
 
   let result = 'IMPOSSIBLE';
 
-  while (sFront < sQueue.length) {
+  outer: while (sFront < sQueue.length) {
     const [y, x] = sQueue[sFront++];
 
     for (let dir = 0; dir < 4; dir++) {
@@ -84,7 +86,7 @@ for (let i = 0; i < N; i++) {
 
       if (ny < 0 || nx < 0 || ny >= N || nx >= M) {
         result = sDistance[y][x] + 1;
-        break;
+        break outer;
       }
 
       if (
