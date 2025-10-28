@@ -1,8 +1,14 @@
+/** https://www.acmicpc.net/problem/2178 */
+
 const input = require('fs')
-  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input4.txt')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
   .split('\n');
+
+const [N, M] = input.shift().split(' ');
+const map = input.map((str) => str.split('').map(Number));
+const visited = Array.from({ length: N }, () => Array(M).fill(false));
 
 /** Pseudo Code
  * 1. 0, 0에서 시작해서 N - 1, M - 1까지 이동해야 하며, 지나야 하는 칸수이므로
@@ -13,10 +19,6 @@ const input = require('fs')
  *
  * 3. 큐에서 아이템을 꺼냈을 때 N - 1, M - 1과 일치할 때 카운트를 콘솔에 찍는다.
  */
-
-const [N, M] = input.shift().split(' ');
-const map = input.map((str) => str.split('').map(Number));
-const visited = Array.from({ length: N }, () => Array(M).fill(false));
 
 const dy = [-1, 1, 0, 0];
 const dx = [0, 0, -1, 1];
