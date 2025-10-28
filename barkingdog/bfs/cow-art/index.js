@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/10026 */
+
 const input = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -23,7 +25,7 @@ const N = +input.shift();
 const defaultVisited = Array.from({ length: N }, () => Array(N).fill(false));
 
 const colorBlindedVisited = Array.from({ length: N }, () =>
-  Array(N).fill(false),
+  Array(N).fill(false)
 );
 
 const dy = [-1, 1, 0, 0];

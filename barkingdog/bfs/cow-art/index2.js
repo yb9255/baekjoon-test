@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/10026 */
+
 const input = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -13,7 +15,7 @@ const N = +input.shift();
 const board = input.map((line) => line.split(''));
 
 const colorBlindedBoard = input.map((line) =>
-  line.split('').map((char) => (char === 'G' ? 'R' : char)),
+  line.split('').map((char) => (char === 'G' ? 'R' : char))
 );
 
 const dy = [-1, 1, 0, 0];
