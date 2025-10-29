@@ -1,4 +1,10 @@
-const input = Number(require('fs').readFileSync('input.txt').toString().trim());
+/** https://www.acmicpc.net/problem/10844 */
+
+const N = +require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim();
+
 const MOD = 1_000_000_000;
 
 /**
@@ -16,14 +22,18 @@ const MOD = 1_000_000_000;
 
 const dp = [0, Array.from({ length: 10 }, (_, index) => (!index ? 0 : 1))];
 
-for (let n = 2; n <= input; n++) {
-  dp[n] = Array.from({ length: 10 }, () => 0);
+for (let i = 2; i <= N; i++) {
+  dp[i] = Array(10).fill(0);
 
   for (let digit = 0; digit <= 9; digit++) {
-    if (digit === 0) dp[n][digit] = dp[n - 1][1] % MOD;
-    else if (digit === 9) dp[n][digit] = dp[n - 1][8] % MOD;
-    else dp[n][digit] = (dp[n - 1][digit - 1] + dp[n - 1][digit + 1]) % MOD;
+    if (digit === 0) {
+      dp[i][digit] = dp[i - 1][1] % MOD;
+    } else if (digit > 0 && digit < 9) {
+      dp[i][digit] = (dp[i - 1][digit + 1] + dp[i - 1][digit - 1]) % MOD;
+    } else {
+      dp[i][digit] = dp[i - 1][8] % MOD;
+    }
   }
 }
 
-console.log(dp[input].reduce((acc, cur) => (acc + cur) % MOD, 0));
+console.log(dp[N].reduce((acc, cur) => (acc + cur) % MOD, 0));
