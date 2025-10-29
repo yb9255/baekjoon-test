@@ -1,13 +1,18 @@
-const input = Number(
-  require('fs').readFileSync('input2.txt').toString().trim(),
-);
+/** https://www.acmicpc.net/problem/11727 */
 
-// 세로x가로
-// 1. 2x1을 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-1)
-// 2. 1x2를 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-2)
-// 3. 2x2를 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-2)
+const input = +require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim();
 
-// 점화식 -> 2 x n == ((2 x (n - 2)) x 2 + 2 x (n - 1))
+/** Pseudo Code
+ * 세로x가로
+ * 1. 2x1을 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-1)
+ * 2. 1x2를 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-2)
+ * 3. 2x2를 마지막에 붙여야 할 때 타일의 경우의 수는 2 x (n-2)
+ *
+ * 점화식 -> 2 x n == ((2 x (n - 2)) x 2 + 2 x (n - 1))
+ */
 
 if (input === 1) {
   console.log(1);
