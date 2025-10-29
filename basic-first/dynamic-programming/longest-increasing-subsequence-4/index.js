@@ -1,11 +1,11 @@
-const input = require('fs')
-  .readFileSync('input.txt')
+/** https://www.acmicpc.net/problem/14002 */
+
+const [[N], sequence] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
-  .split('\n');
-
-const sequenceLength = +input[0];
-const sequence = input[1].split(' ').map(Number);
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /**
  * 점화식
@@ -43,25 +43,27 @@ const sequence = input[1].split(' ').map(Number);
  * 10. 최종적으로 parentIndices의 값이 -1이 될때까지 백트래킹하고 그 결과를 answer에 담은 뒤, reverse해서 리턴한다.
  */
 
-// 4. 만약 sequence의 i 인덱스에 있는 num이 부분수열에 포함된다면, 그 num의
-// 앞 포지션에 위치한 부분수열 숫자의 index를 기록하는 parent 배열 생성
-// e.g.) sequence가 [3, 5, 7]이라고 한다면
-// parent는 [-1, 0, 1]이 됨. sequence[0]의 값은 부분 수열에서 앞에 값이 없어서 parent[0] === -1
-// sequence[1]은 부분수열 내에서 3 뒤인데 3의 sequence내 index가 0이므로 parent[1] === 0
-// sequence[2]는 부분수열 내에서 5 뒤인데 5의 sequence내 index가 1이므로 parent[2] === 1
-
-// 5. lis의 길이를 구함. 구체적인 구하는 로직은 longest-increasing-subsequence 참조
-// 이 때, lisIndices는 현재 index를 넣는다.
-// 또한, parent은 이전 index가 없다면 -1 lis의 가장 끝값보다 크다면 lisIndices의 마지막 값,
-// 중간 인덱스에 lis 값이 배치되면 중간 index의 바로 이전 index를 parent에 배치한다.
-
-// 6. lisIndices의 마지막 값이 부분 수열 마지막 값의 subsequence 내 index임. 그 값을 우선 answer에 push
-// 7. parent에서 lisIndices의 이전 부분 수열 숫자의 index를 찾음. 이 index로 이전 수열 값을 구해서 answer에 push
-// 8. 최종적으로 answer에는 부분 수열이 역순으로 숫자가 들어감. 이 값을 리턴
+/**
+ * 1. 만약 sequence의 i 인덱스에 있는 num이 부분수열에 포함된다면, 그 num의
+ * 앞 포지션에 위치한 부분수열 숫자의 index를 기록하는 parent 배열 생성
+ * e.g.) sequence가 [3, 5, 7]이라고 한다면
+ * parent는 [-1, 0, 1]이 됨. sequence[0]의 값은 부분 수열에서 앞에 값이 없어서 parent[0] === -1
+ * sequence[1]은 부분수열 내에서 3 뒤인데 3의 sequence내 index가 0이므로 parent[1] === 0
+ * sequence[2]는 부분수열 내에서 5 뒤인데 5의 sequence내 index가 1이므로 parent[2] === 1
+ *
+ * 2. lis의 길이를 구함. 구체적인 구하는 로직은 longest-increasing-subsequence 참조
+ * 이 때, lisIndices는 현재 index를 넣는다.
+ * 또한, parent은 이전 index가 없다면 -1 lis의 가장 끝값보다 크다면 lisIndices의 마지막 값,
+ * 중간 인덱스에 lis 값이 배치되면 중간 index의 바로 이전 index를 parent에 배치한다.
+ *
+ * 3. lisIndices의 마지막 값이 부분 수열 마지막 값의 subsequence 내 index임. 그 값을 우선 answer에 push
+ * 4. parent에서 lisIndices의 이전 부분 수열 숫자의 index를 찾음. 이 index로 이전 수열 값을 구해서 answer에 push
+ * 5. 최종적으로 answer에는 부분 수열이 역순으로 숫자가 들어감. 이 값을 리턴
+ */
 
 const lis = [];
 const lisIndices = [];
-const parent = Array.from({ length: sequenceLength }, () => -1);
+const parent = Array.from({ length: N }, () => -1);
 
 const binarySearch = (targetNum) => {
   let left = 0;
@@ -77,7 +79,7 @@ const binarySearch = (targetNum) => {
   return right;
 };
 
-for (let i = 0; i < sequenceLength; i++) {
+for (let i = 0; i < N; i++) {
   const num = sequence[i];
 
   if (!lis.length) {
@@ -105,51 +107,3 @@ while (lastIndex !== -1) {
 }
 
 console.log(lis.length + '\n' + answer.reverse().join(' '));
-
-const n = +input[0];
-const sequence2 = input[1].split(' ').map(Number);
-const answer2 = [];
-
-/** 기존 풀이에서 길이를 계산하는 배열 하나를 줄임. */
-
-const dp = [];
-const prev = Array(n).fill(-1);
-
-const binarySearch2 = (target) => {
-  let left = 0;
-  let right = dp.length - 1;
-
-  while (left < right) {
-    const mid = Math.floor((left + right) / 2);
-
-    if (sequence2[dp[mid]] >= target) right = mid;
-    else left = mid + 1;
-  }
-
-  return right;
-};
-
-for (let i = 0; i < n; i++) {
-  const num = sequence2[i];
-
-  if (!dp.length) {
-    prev[i] = -1;
-    dp.push(i);
-  } else if (sequence2[dp[dp.length - 1]] < num) {
-    prev[i] = dp[dp.length - 1];
-    dp.push(i);
-  } else {
-    const replaceIndex = binarySearch2(num);
-    dp[replaceIndex] = i;
-    prev[i] = replaceIndex > 0 ? dp[replaceIndex - 1] : -1;
-  }
-}
-
-let lastIndex2 = dp[dp.length - 1];
-
-while (lastIndex2 !== -1) {
-  answer2.push(sequence2[lastIndex2]);
-  lastIndex2 = prev[lastIndex2];
-}
-
-console.log(dp.length + '\n' + answer2.reverse().join(' '));
