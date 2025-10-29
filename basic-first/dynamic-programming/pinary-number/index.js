@@ -1,4 +1,9 @@
-const n = +require('fs').readFileSync('input.txt').toString();
+/** https://www.acmicpc.net/problem/2193 */
+
+const N = +require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim();
 
 /** 점화식
  * 1. 끝자리가 0으로 끝나는 경우 -> 끝에 0, 1 둘 다 붙일 수 있음.
@@ -12,26 +17,12 @@ const n = +require('fs').readFileSync('input.txt').toString();
  * 6. 숫자가 커지므로 BigInt 필수
  */
 
-const dp = Array.from({ length: n + 1 }, () => [BigInt(0), BigInt(0)]);
-dp[1] = [BigInt(0), BigInt(1)];
+const dp = Array.from({ length: N + 1 }, () => [0n, 0n]);
+dp[1] = [0n, 1n];
 
-for (let i = 2; i <= n; i++) {
+for (let i = 2; i <= N; i++) {
   dp[i][0] = dp[i - 1][0] + dp[i - 1][1];
   dp[i][1] = dp[i - 1][0];
 }
 
-console.log((dp[n][0] + dp[n][1]).toString());
-
-// 조금 더 최적화한다면, let으로 계속 변수만 바꾸는 방법도 있다.
-
-let curZero = 0n;
-let curOne = 1n;
-
-for (let i = 2; i <= n; i++) {
-  const newZero = curZero + curOne;
-  const newOne = curZero;
-  curZero = newZero;
-  curOne = newOne;
-}
-
-console.log((curZero + curOne).toString());
+console.log((dp[N][0] + dp[N][1]).toString());
