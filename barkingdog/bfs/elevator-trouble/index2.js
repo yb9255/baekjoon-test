@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/5014 */
+
 const [F, S, G, U, D] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -21,6 +23,11 @@ let front = 0;
 while (front < queue.length) {
   const curFloor = queue[front++];
 
+  if (curFloor === G) {
+    console.log(distance[G]);
+    process.exit();
+  }
+
   for (const next of [curFloor + U, curFloor - D]) {
     if (next < 1 || next > F || distance[next] !== -1) continue;
     distance[next] = distance[curFloor] + 1;
@@ -28,8 +35,4 @@ while (front < queue.length) {
   }
 }
 
-if (distance[G] === -1) {
-  console.log('use the stairs');
-} else {
-  console.log(distance[G]);
-}
+console.log('use the stairs');
