@@ -1,7 +1,9 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
-
-const sequenceLength = +input[0];
-const sequence = input[1].split(' ').map(Number);
+const [[N], sequence] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /**
  * 점화식
@@ -28,24 +30,23 @@ const sequence = input[1].split(' ').map(Number);
  * 7. lis의 길이를 리턴한다.
  */
 
-// 1. sequence index를 0부터 순회한다. (sequence[i]와 같은 값을 num이라고 한다.)
-// 2. 만약 lis(Longest Increasing sequence)의 길이가 0이면, 값을 push한다.
-// 3. 만약 lis 배열의 마지막 값보다 현재 num이 더 크다면, 값을 push한다.
-
-// 4. 2, 3에 둘 다 해당하지 않는다면, Binary Search(Divide and Conquer)를 시작한다.
-// 4-1. 현재 lis의 중간 index를 구하고, left에 0, right에 list 마지막 인덱스를 지정한다.
-// 4-2. 왼쪽 인덱스를 가르키는 left pivot이 right보다 작을 동안 while을 순회한다.
-// 4-3. while 내에서 현재 left, right의 중간 인덱스를 구한다.
-
-// 4-4. 중간 인덱스에 있는 값보다 현재 num의 값이 크다면, mid 아래의 값은 필요하지 않으므로
-// left pivot을 mid + 1로 옮긴다.
-
-// 4-5. 중간 인덱스에 있는 값보다 현재 num의 값이 작다면, mid 위의 값이 필요하지 않으므로
-// right pivot을 mid로 옮긴다. 우리는 현재 lis[mid]에 있는 값과
-// num이 동일한 케이스도 대응해야 하기 때문에, right가 mid - 1이 되면 안된다.
-// e.g.)[10, 20, 40, 10]의 경우 두번째 10을 순회할때는 lis[mid] === target이 될 수 있다.
-
-// 4-6. 최종적으로 right에 현재 숫자의 lis 포지션이 담기게 된다.
+/** Pseudo Code
+ * 1. sequence index를 0부터 순회한다. (sequence[i]와 같은 값을 num이라고 한다.)
+ * 2. 만약 lis(Longest Increasing sequence)의 길이가 0이면, 값을 push한다.
+ * 3. 만약 lis 배열의 마지막 값보다 현재 num이 더 크다면, 값을 push한다.
+ *
+ * 4. 2, 3에 둘 다 해당하지 않는다면, Binary Search(Divide and Conquer)를 시작한다.
+ * 4-1. 현재 lis의 중간 index를 구하고, left에 0, right에 list 마지막 인덱스를 지정한다.
+ * 4-2. 왼쪽 인덱스를 가르키는 left pivot이 right보다 작을 동안 while을 순회한다.
+ * 4-3. while 내에서 현재 left, right의 중간 인덱스를 구한다.
+ * 4-4. 중간 인덱스에 있는 값보다 현재 num의 값이 크다면, mid 아래의 값은 필요하지 않으므로
+ * left pivot을 mid + 1로 옮긴다.
+ * 4-5. 중간 인덱스에 있는 값보다 현재 num의 값이 작다면, mid 위의 값이 필요하지 않으므로
+ * right pivot을 mid로 옮긴다. 우리는 현재 lis[mid]에 있는 값과
+ * num이 동일한 케이스도 대응해야 하기 때문에, right가 mid - 1이 되면 안된다.
+ * e.g.)[10, 20, 40, 10]의 경우 두번째 10을 순회할때는 lis[mid] === target이 될 수 있다.
+ * 4-6. 최종적으로 right에 현재 숫자의 lis 포지션이 담기게 된다.
+ */
 
 const lis = [];
 
@@ -63,7 +64,7 @@ const findPosition = (target) => {
   return right;
 };
 
-for (let i = 0; i <= sequenceLength; i++) {
+for (let i = 0; i <= N; i++) {
   const num = sequence[i];
 
   if (lis.length === 0 || lis[lis.length - 1] < num) {
