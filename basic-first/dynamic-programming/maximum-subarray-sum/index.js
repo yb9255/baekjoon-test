@@ -1,6 +1,11 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
-const iter = Number(input[0]);
-const array = input[1].split(' ').map(Number);
+/** https://www.acmicpc.net/problem/1912 */
+
+const [[N], nums] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /**
  * Kadane's Algorithm
@@ -31,11 +36,11 @@ const array = input[1].split(' ').map(Number);
  * 6. 최종적으로 maxSum을 답으로 제출한다.
  */
 
-let maxSum = array[0];
-let curSum = array[0];
+let maxSum = nums[0];
+let curSum = nums[0];
 
-for (let i = 1; i < iter; i++) {
-  curSum = Math.max(curSum + array[i], array[i]);
+for (let i = 1; i < N; i++) {
+  curSum = Math.max(curSum + nums[i], nums[i]);
   maxSum = Math.max(maxSum, curSum);
 }
 
