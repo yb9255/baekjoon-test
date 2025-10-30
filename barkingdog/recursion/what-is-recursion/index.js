@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/17478 */
+
 const maxRecursionCount = +require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
