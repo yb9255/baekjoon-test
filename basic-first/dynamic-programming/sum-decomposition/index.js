@@ -1,11 +1,12 @@
-const input = require('fs')
-  .readFileSync('input2.txt')
+/** https://www.acmicpc.net/problem/2225 */
+
+const [N, K] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .split(' ')
   .map(Number);
 
 const MOD = 1_000_000_000;
-const [N, K] = input;
 
 /**
  * 점화식 설명
@@ -71,7 +72,7 @@ const [N, K] = input;
  */
 
 const dp = Array.from({ length: K + 1 }, () =>
-  Array.from({ length: N + 1 }, (_, i) => (i === 0 ? 1 : 0)),
+  Array.from({ length: N + 1 }, (_, i) => (i === 0 ? 1 : 0))
 );
 
 for (let k = 1; k <= K; k++) {
