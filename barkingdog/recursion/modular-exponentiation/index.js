@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/1629 */
+
 const [A, B, C] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -31,14 +33,13 @@ const [A, B, C] = require('fs')
  * 7. a % mod부터 a^b % mod가 될때까지 거듭제곱을 반복한다.
  */
 
-const modularExponentiation = (a, b, mod) => {
-  if (b === 1n) return a % mod;
+const modularExponentiation = (a, b) => {
+  if (b === 1n) return a % C;
 
-  let val = modularExponentiation(a, b / 2n, mod);
-  val = (val * val) % mod;
+  const base = modularExponentiation(a, b / 2n);
 
-  if (b % 2n === 0n) return val;
-  else return (val * a) % mod;
+  if (b % 2n === 0n) return (base * base) % C;
+  else return (base * base * a) % C;
 };
 
-console.log(modularExponentiation(A, B, C).toString());
+console.log(modularExponentiation(A, B).toString());

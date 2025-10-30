@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/1629 */
+
 const [A, B, C] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -8,9 +10,9 @@ const [A, B, C] = require('fs')
 /** Pseudo Code (반복문 풀이)
  */
 
-let a = A,
-  b = B,
-  mod = C;
+let a = A;
+let b = B;
+let mod = C;
 
 let result = 1n;
 
