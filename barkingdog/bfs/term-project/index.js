@@ -1,4 +1,6 @@
-const input = require('fs')
+/** https://www.acmicpc.net/problem/9466 */
+
+const [T, ...lines] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
@@ -36,7 +38,6 @@ const input = require('fs')
  *
  */
 
-const T = +input.shift();
 let line = 0;
 
 const NOT_VISITED = -1;
@@ -44,9 +45,9 @@ const IN_CYCLE = 0;
 
 const answer = [];
 
-for (let t = 0; t < T; t++) {
-  const N = +input[line++];
-  const nextStudents = [0, ...input[line++].split(' ').map(Number)];
+for (let t = 0; t < +T; t++) {
+  const N = +lines[line++];
+  const nextStudents = [0, ...lines[line++].split(' ').map(Number)];
   const cycleState = Array(N + 1).fill(NOT_VISITED);
 
   for (let i = 1; i <= N; i++) {
@@ -73,13 +74,13 @@ for (let t = 0; t < T; t++) {
     }
   }
 
-  let notCycleCount = 0;
+  let notInCycleCount = 0;
 
   for (let i = 1; i <= N; i++) {
-    if (cycleState[i] !== IN_CYCLE) notCycleCount++;
+    if (cycleState[i] !== IN_CYCLE) notInCycleCount++;
   }
 
-  answer.push(notCycleCount);
+  answer.push(notInCycleCount);
 }
 
 console.log(answer.join('\n'));
