@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/11729 */
+
 const n = +require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -14,12 +16,12 @@ const n = +require('fs')
  * 3. 원판 n개를 기둥 1에서 기둥 3으로 옮기는 함수를 작성한다.
  * 인자로 원판 개수 n, 시작 기둥 a, 도착 기둥 b를 인자로 받는다.
  *
- * 4. base condition은 n이 1일 때 기둥 a에서 기둥 b로 값을 옮긴다.
+ * 4. base condition은 n이 1일 때 기둥 a에서 기둥 b로 값을 옮기고 이동을 기록한다.
  *
  * 5. a도 b도 아닌 기둥은 6 - a - b.
  * 이에 기반한 재귀식은 다음과 같다.(1 + 2 + 3 = 6에서 기둥 2개 번호를 빼면 남은 기둥 값이 남으므로)
  * 5-1. n - 1개의 원판을 기둥 a에서 6 - a - b로 옮긴다.
- * 5-2. n번 원판을 기둥 a에서 b로 옮긴다.
+ * 5-2. n번 원판을 기둥 a에서 b로 옮기고 이동을 기록한다.
  * 5-3. n - 1개의 원판을 기둥 6-a-b에서 b로 옮긴다.
  */
 
