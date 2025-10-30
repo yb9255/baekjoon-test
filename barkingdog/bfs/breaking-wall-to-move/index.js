@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/2206 */
+
 const input = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -20,7 +22,7 @@ const [N, M] = input[0].split(' ').map(Number);
 const board = input.slice(1);
 
 const distance = Array.from({ length: N }, () =>
-  Array.from({ length: M }, () => [-1, -1]),
+  Array.from({ length: M }, () => [-1, -1])
 );
 
 const dy = [-1, 1, 0, 0];
