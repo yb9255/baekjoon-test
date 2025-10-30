@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/6593 */
+
 const input = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -38,7 +40,7 @@ while (true) {
   }
 
   const distance = Array.from({ length: L }, () =>
-    Array.from({ length: R }, () => Array(C).fill(-1)),
+    Array.from({ length: R }, () => Array(C).fill(-1))
   );
 
   const queue = [];
