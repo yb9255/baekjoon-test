@@ -7,22 +7,22 @@ const [N, M] = require('fs')
   .split(' ')
   .map(Number);
 
-/** Pseudo Code
- * N-and-M-1에서 checked 부분을 빼고 풀이
- */
+/** 기존 풀이에서 acc를 cur 배열에서 오버라이딩 하도록 한 풀이 */
 
-const answer = [];
+const cur = Array(M);
+const result = [];
 
-const getSequence = (depth, total) => {
+const dfs = (depth) => {
   if (depth === M) {
-    answer.push(total.trim());
+    result.push(cur.join(' '));
     return;
   }
 
   for (let i = 1; i <= N; i++) {
-    getSequence(depth + 1, total + i + ' ');
+    cur[depth] = i;
+    dfs(depth + 1);
   }
 };
 
-getSequence(0, '');
-console.log(answer.join('\n'));
+dfs(0);
+console.log(result.join('\n'));
