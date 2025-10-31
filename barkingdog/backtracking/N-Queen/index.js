@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/9663 */
+
 const N = +require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -11,6 +13,8 @@ const N = +require('fs')
  * 3. 각 x, y + x, y - x 값을 만드는 좌표에 퀸이 있는지 여부를 체크해주는 방문 배열을 3개 생성
  * 이 때, y - x는 -(N - 1)까지 될 수 있으나 배열에 마이너스 인덱스는 없음. 그러므로 N - 1을 더한
  * y - x + N - 1 인덱스에 y - x 값을 만드는 좌표에 퀸이 있는지 체크하도록 함.
+ * y과 N - 1 인덱스, x가 N - 1 인덱스만큼 존재하므로 1번과 2번 모두 2 * N - 1개 인덱스만큼 존재하므로 배열 길이를
+ * 넉넉하게 2 * N + 1로 설정
  *
  * 4. 인자로 y를 받는 재귀함수를 돈다. y가 N이면 겹치지 않고 마지막 열까지 도착했다는 뜻이므로 정답 count를 올리고
  * 재귀를 종료한다.
