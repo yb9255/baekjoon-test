@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/14956 */
+
 const [[K, totalWalk]] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
