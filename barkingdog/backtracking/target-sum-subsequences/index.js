@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/1182 */
+
 const [[N, S], sequence] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
