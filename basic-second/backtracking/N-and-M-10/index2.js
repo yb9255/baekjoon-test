@@ -1,7 +1,7 @@
-/** https://www.acmicpc.net/problem/15663 */
+/** https://www.acmicpc.net/problem/15664 */
 
 const [[N, M], numbers] = require('fs')
-  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input2.txt')
   .toString()
   .trim()
   .split('\n')
@@ -13,9 +13,8 @@ numbers.sort((a, b) => a - b);
 
 const cur = [];
 const result = [];
-const visited = Array(N).fill(false);
 
-const dfs = (depth) => {
+const dfs = (depth, startIdx) => {
   if (depth === M) {
     result.push(cur.join(' '));
     return;
@@ -23,17 +22,12 @@ const dfs = (depth) => {
 
   let prev = null;
 
-  for (let i = 0; i < N; i++) {
-    if (visited[i]) continue;
-    if (numbers[i] === prev) continue;
-
+  for (let i = startIdx; i < N; i++) {
+    if (prev === numbers[i]) continue;
     cur[depth] = prev = numbers[i];
-
-    visited[i] = true;
-    dfs(depth + 1);
-    visited[i] = false;
+    dfs(depth + 1, i + 1);
   }
 };
 
-dfs(0);
+dfs(0, 0);
 console.log(result.join('\n'));
