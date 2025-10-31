@@ -7,25 +7,24 @@ const [[N, M], numbers] = require('fs')
   .split('\n')
   .map((str) => str.split(' ').map(Number));
 
-/** Pseudo Code
- * 1. N과 M(5) 풀이에서 visited만 표시하지 않도록 수정
- */
+/** stack 대신 cur에 매 재귀마다 값을 오버라이딩하도록 구현 */
 
 numbers.sort((a, b) => a - b);
-const answer = [];
 
-const getSequence = (depth, stack) => {
+const cur = [];
+const result = [];
+
+const dfs = (depth) => {
   if (depth === M) {
-    answer.push(stack.join(' '));
+    result.push(cur.map((i) => numbers[i]).join(' '));
     return;
   }
 
   for (let i = 0; i < N; i++) {
-    stack.push(numbers[i]);
-    getSequence(depth + 1, stack);
-    stack.pop();
+    cur[depth] = i;
+    dfs(depth + 1);
   }
 };
 
-getSequence(0, []);
-console.log(answer.join('\n'));
+dfs(0);
+console.log(result.join('\n'));
