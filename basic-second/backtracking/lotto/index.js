@@ -1,4 +1,6 @@
-const input = require('fs')
+/** https://www.acmicpc.net/problem/6603 */
+
+const cases = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
@@ -26,7 +28,8 @@ const getCombs = (startIndex, numbers, depth, stack) => {
   }
 };
 
-for (const [N, ...numbers] of input) {
+for (let i = 0; i < cases.length; i++) {
+  const [N, ...numbers] = cases[i];
   if (N === 0) break;
   getCombs(0, numbers, 0, []);
   answer.push('');
