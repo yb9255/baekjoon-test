@@ -1,10 +1,12 @@
-const input = require('fs')
+/** https://www.acmicpc.net/problem/3085 */
+
+const [N, ...rows] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .split('\n');
 
-const n = +input.shift();
-const rows = input.map((str) => str.split(''));
+const n = +N;
+const map = rows.map((str) => str.split(''));
 
 /**
  * [
@@ -15,28 +17,28 @@ const rows = input.map((str) => str.split(''));
   [ 'C', 'P', 'P', 'Z', 'Z' ]
   ]
 
-  1. n * n 타일에서 rows[n][0]의 경우 rows[n + 1][0]과 rows[n][1]과 바꿔볼 수 있음.
-  2. rows[n][m](0 < m < rows[n].length - 1)의 경우 rows[n][m - 1]은 이전 m - 1에서 계산할 대 바꿔봤으므로
-  rows[n + 1][m]의 경우와 rows[n][m + 1] 끼리 바꿔볼 수 있음.
-  3. rows[n][rows[n].length - 1]의 경우 바로 아래의 값만 바꿔야 함 (다음 column이 없으므로)
+  1. n * n 타일에서 map[n][0]의 경우 map[n + 1][0]과 map[n][1]과 바꿔볼 수 있음.
+  2. map[n][m](0 < m < map[n].length - 1)의 경우 map[n][m - 1]은 이전 m - 1에서 계산할 대 바꿔봤으므로
+  map[n + 1][m]의 경우와 map[n][m + 1] 끼리 바꿔볼 수 있음.
+  3. map[n][map[n].length - 1]의 경우 바로 아래의 값만 바꿔야 함 (다음 column이 없으므로)
   4. 마지막 줄의 경우 다음줄이 없으므로, 바로 다음 column과 바꿔보기만 하면 된다.
 
   5. 각 row, column의 값을 바꿀 때마다, 가장 연속되는 문자열을 row와 column을 매트릭스를 전부 순회하면서 찾아보낟
-  e.g.) rows[1][2]의 값을 다룰 때, rows[1][0 ~ rows.length - 1]의 값과 rows[1][rows[1] ~ rows[rows[1].length - 1]] 까지 값을
+  e.g.) map[1][2]의 값을 다룰 때, map[1][0 ~ map.length - 1]의 값과 map[1][map[1] ~ map[map[1].length - 1]] 까지 값을
   전부 확인하고 가장 연속되는 문자열 길이를 maxCount에 저장한다.
 
  */
 
 let maxCount = 1;
 
-const checkMaxLength = (rows) => {
+const checkMaxLength = (map) => {
   let curMaxCount = 1;
 
   for (let row = 0; row < n; row++) {
     let colCount = 1;
 
     for (let col = 1; col < n; col++) {
-      if (rows[row][col - 1] === rows[row][col]) {
+      if (map[row][col - 1] === map[row][col]) {
         colCount++;
       } else {
         colCount = 1;
@@ -50,7 +52,7 @@ const checkMaxLength = (rows) => {
     let rowCount = 1;
 
     for (let row = 1; row < n; row++) {
-      if (rows[row - 1][col] === rows[row][col]) {
+      if (map[row - 1][col] === map[row][col]) {
         rowCount++;
       } else {
         rowCount = 1;
@@ -63,25 +65,25 @@ const checkMaxLength = (rows) => {
   return curMaxCount;
 };
 
-const swapCol = ({ rows, row, col }) => {
-  [rows[row][col], rows[row][col + 1]] = [rows[row][col + 1], rows[row][col]];
+const swapCol = ({ map, row, col }) => {
+  [map[row][col], map[row][col + 1]] = [map[row][col + 1], map[row][col]];
 };
 
-const swapRow = ({ rows, row, col }) => {
-  [rows[row][col], rows[row + 1][col]] = [rows[row + 1][col], rows[row][col]];
+const swapRow = ({ map, row, col }) => {
+  [map[row][col], map[row + 1][col]] = [map[row + 1][col], map[row][col]];
 };
 
 for (let row = 0; row < n; row++) {
   for (let col = 0; col < n; col++) {
     if (row + 1 < n) {
-      swapRow({ rows, row, col });
-      maxCount = Math.max(maxCount, checkMaxLength(rows));
-      swapRow({ rows, row, col });
+      swapRow({ map, row, col });
+      maxCount = Math.max(maxCount, checkMaxLength(map));
+      swapRow({ map, row, col });
     }
     if (col + 1 < n) {
-      swapCol({ rows, row, col });
-      maxCount = Math.max(maxCount, checkMaxLength(rows));
-      swapCol({ rows, row, col });
+      swapCol({ map, row, col });
+      maxCount = Math.max(maxCount, checkMaxLength(map));
+      swapCol({ map, row, col });
     }
   }
 }
@@ -102,27 +104,27 @@ console.log(maxCount);
 
 maxCount = 1;
 
-const getMaxCountFromPosition = ({ rows, row, col }) => {
+const getMaxCountFromPosition = ({ map, row, col }) => {
   let rowCount = 1;
   let colCount = 1;
 
   for (let i = col - 1; i >= 0; i--) {
-    if (rows[row][col] === rows[row][i]) colCount++;
+    if (map[row][col] === map[row][i]) colCount++;
     else break;
   }
 
   for (let i = col + 1; i < n; i++) {
-    if (rows[row][col] === rows[row][i]) colCount++;
+    if (map[row][col] === map[row][i]) colCount++;
     else break;
   }
 
   for (let i = row - 1; i >= 0; i--) {
-    if (rows[row][col] === rows[i][col]) rowCount++;
+    if (map[row][col] === map[i][col]) rowCount++;
     else break;
   }
 
   for (let i = row + 1; i < n; i++) {
-    if (rows[row][col] === rows[i][col]) rowCount++;
+    if (map[row][col] === map[i][col]) rowCount++;
     else break;
   }
 
@@ -132,26 +134,26 @@ const getMaxCountFromPosition = ({ rows, row, col }) => {
 for (let row = 0; row < n; row++) {
   for (let col = 0; col < n; col++) {
     if (row + 1 < n) {
-      swapRow({ rows, row, col });
+      swapRow({ map, row, col });
 
       maxCount = Math.max(
         maxCount,
-        getMaxCountFromPosition({ rows, row, col }),
-        getMaxCountFromPosition({ rows, row: row + 1, col }),
+        getMaxCountFromPosition({ map, row, col }),
+        getMaxCountFromPosition({ map, row: row + 1, col })
       );
 
-      swapRow({ rows, row, col });
+      swapRow({ map, row, col });
     }
     if (col + 1 < n) {
-      swapCol({ rows, row, col });
+      swapCol({ map, row, col });
 
       maxCount = Math.max(
         maxCount,
-        getMaxCountFromPosition({ rows, row, col }),
-        getMaxCountFromPosition({ rows, row, col: col + 1 }),
+        getMaxCountFromPosition({ map, row, col }),
+        getMaxCountFromPosition({ map, row, col: col + 1 })
       );
 
-      swapCol({ rows, row, col });
+      swapCol({ map, row, col });
     }
   }
 }
