@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/6064 */
+
 const [[T], ...calendars] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
