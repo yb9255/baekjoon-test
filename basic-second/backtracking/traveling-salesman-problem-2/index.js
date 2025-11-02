@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/10971 */
+
 const [[N], ...travelCostMap] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -37,7 +39,7 @@ const findMinCostFromStartCity = (start, now, depth, sum) => {
         start,
         next,
         depth + 1,
-        sum + travelCostMap[now][next],
+        sum + travelCostMap[now][next]
       );
 
       visited[next] = false;
