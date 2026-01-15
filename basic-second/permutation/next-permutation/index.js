@@ -1,5 +1,7 @@
+/** https://www.acmicpc.net/problem/10972 */
+
 const [[N], nums] = require('fs')
-  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input2.txt')
   .toString()
   .trim()
   .split('\n')
@@ -45,20 +47,16 @@ const [[N], nums] = require('fs')
  *    이는 사전순으로 가장 마지막 순열이므로 다음 순열은 존재하지 않으며, -1을 출력한다.
  */
 
-let i = N - 2;
+let pivot = N - 2;
 
-while (i >= 0 && nums[i] >= nums[i + 1]) {
-  i--;
-}
+while (pivot >= 0 && nums[pivot] >= nums[pivot + 1]) pivot--;
 
-if (i >= 0) {
-  let j = nums.length - 1;
+if (pivot >= 0) {
+  let successor = nums.length - 1;
 
-  while (j > i && nums[j] <= nums[i]) {
-    j--;
-  }
+  while (successor > pivot && nums[successor] <= nums[pivot]) successor--;
 
-  [nums[i], nums[j]] = [nums[j], nums[i]];
+  [nums[pivot], nums[successor]] = [nums[successor], nums[pivot]];
 
   const reverse = (start, end) => {
     while (start < end) {
@@ -68,7 +66,7 @@ if (i >= 0) {
     }
   };
 
-  reverse(i + 1, nums.length - 1);
+  reverse(pivot + 1, nums.length - 1);
 
   console.log(nums.join(' '));
 } else {
