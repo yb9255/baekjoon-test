@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/16194 */
+
 let [[N], prices] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
