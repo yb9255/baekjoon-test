@@ -9,7 +9,6 @@
  *      최대 길이가 될 수 있음.
  * 4) dp의 최댓값 출력
  */
-
 const [[N], sequence] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
@@ -21,12 +20,10 @@ const dp = new Array(N).fill(1);
 
 for (let i = 0; i < N; i++) {
   for (let j = 0; j < i; j++) {
-    if (sequence[j] < sequence[i]) {
-      if (dp[i] < dp[j] + 1) {
-        dp[i] = dp[j] + 1;
-      }
+    if (sequence[i] > sequence[j]) {
+      dp[i] = Math.max(dp[i], dp[j] + 1);
     }
   }
 }
 
-console.log(dp.reduce((acc, cur) => Math.max(acc, cur), -Infinity));
+console.log(Math.max(...dp));
