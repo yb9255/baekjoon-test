@@ -35,7 +35,7 @@ for (let i = 0; i < N; i++) {
 }
 
 const lisLastIdx = dp.reduce(
-  (acc, _, idx) => (dp[idx] > dp[acc] ? idx : acc),
+  (acc, _, idx) => (dp[acc] > dp[idx] ? acc : idx),
   0
 );
 
