@@ -1,10 +1,11 @@
-const input = require('fs')
-  .readFileSync('input.txt')
+/** https://www.acmicpc.net/problem/2156 */
+
+const [n, ...wines] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
+  .trim()
   .split('\n')
   .map(Number);
-
-const [n, ...wines] = input;
 
 /**
  * 점화식
