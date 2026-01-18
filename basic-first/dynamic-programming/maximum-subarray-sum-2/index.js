@@ -1,7 +1,11 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
+/** https://www.acmicpc.net/problem/13398 */
 
-const iter = +input[0];
-const sequence = input[1].split(' ').map(Number);
+const [[N], sequence] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /** 점화식
  * 1. Kadane 알고리즘에 기반한 연속합 defaultDp를 만든다. 자세한 수식은 maximum-subarray-sum 참조
@@ -21,7 +25,7 @@ let defaultMaxSum = sequence[0];
 let oneRemovedCurSum = sequence[0];
 let oneRemovedMaxSum = sequence[0];
 
-for (let i = 1; i < iter; i++) {
+for (let i = 1; i < N; i++) {
   const num = sequence[i];
   const newDefaultCurSum = Math.max(num, defaultCurSum + num);
   const newOneRemovedCurSum = Math.max(defaultCurSum, oneRemovedCurSum + num);
