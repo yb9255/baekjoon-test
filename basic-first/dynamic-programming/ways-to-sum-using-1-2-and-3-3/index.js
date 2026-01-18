@@ -1,10 +1,11 @@
-const input = require('fs')
-  .readFileSync('input.txt')
+/** https://www.acmicpc.net/problem/15988 */
+
+const [N, ...nums] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
+  .trim()
   .split('\n')
   .map(Number);
-
-const iter = input.shift();
 
 /** 점화식
  * 마지막에 1을 더하면 n - 1의 조합 개수에 1을 더한 것
@@ -17,8 +18,8 @@ const dp = [0, 1, 2, 4, 7];
 const answer = [];
 const MOD = 1_000_000_009;
 
-for (let i = 0; i < iter; i++) {
-  const num = input[i];
+for (let i = 0; i < N; i++) {
+  const num = nums[i];
 
   if (num < dp.length) {
     answer.push(dp[num]);
