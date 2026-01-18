@@ -1,4 +1,10 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
+/** https://www.acmicpc.net/problem/1932 */
+
+const input = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n');
 
 const iter = +input.shift();
 const triangle = input.map((val) => val.split(' ').map(Number));
