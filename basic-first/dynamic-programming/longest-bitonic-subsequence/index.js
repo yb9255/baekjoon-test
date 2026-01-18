@@ -1,7 +1,10 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
+/** https://www.acmicpc.net/problem/11054 */
 
-const iter = +input[0];
-const sequence = input[1].split(' ').map(Number);
+const [[N], sequence] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /** 점화식
  * 1. sequence의 정방향으로 LIS의 index별 최대 길이를 구하는 dp를 만든다. (forwardDp)
@@ -16,11 +19,11 @@ const sequence = input[1].split(' ').map(Number);
  * 1을 빼준다.
  */
 
-const forwardDp = Array(iter).fill(1);
-const backwardDp = Array(iter).fill(1);
+const forwardDp = Array(N).fill(1);
+const backwardDp = Array(N).fill(1);
 let result = -Infinity;
 
-for (let i = 1; i < iter; i++) {
+for (let i = 1; i < N; i++) {
   for (let j = 0; j < i; j++) {
     if (sequence[i] > sequence[j]) {
       forwardDp[i] = Math.max(forwardDp[i], forwardDp[j] + 1);
@@ -28,15 +31,15 @@ for (let i = 1; i < iter; i++) {
   }
 }
 
-for (let i = iter - 2; i >= 0; i--) {
-  for (let j = iter - 1; j > i; j--) {
+for (let i = N - 2; i >= 0; i--) {
+  for (let j = N - 1; j > i; j--) {
     if (sequence[i] > sequence[j]) {
       backwardDp[i] = Math.max(backwardDp[i], backwardDp[j] + 1);
     }
   }
 }
 
-for (let i = 0; i < iter; i++) {
+for (let i = 0; i < N; i++) {
   result = Math.max(result, forwardDp[i] + backwardDp[i] - 1);
 }
 
