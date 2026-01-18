@@ -1,4 +1,10 @@
-const n = +require('fs').readFileSync('input.txt').toString();
+/** https://www.acmicpc.net/problem/1309 */
+
+const N = +require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim();
+
 const MOD = 9901;
 
 /** 점화식
@@ -21,14 +27,14 @@ const MOD = 9901;
 
 const dp = [0, [1, 1, 1]];
 
-for (let i = 2; i <= n; i++) {
+for (let i = 2; i <= N; i++) {
   dp[i] = [];
   dp[i][0] = (dp[i - 1][0] + dp[i - 1][1] + dp[i - 1][2]) % MOD;
   dp[i][1] = (dp[i - 1][0] + dp[i - 1][2]) % MOD;
   dp[i][2] = (dp[i - 1][0] + dp[i - 1][1]) % MOD;
 }
 
-console.log(dp[n].reduce((prev, cur) => (prev + cur) % MOD, 0));
+console.log(dp[N].reduce((prev, cur) => (prev + cur) % MOD, 0));
 
 /** 메모리 최적화 */
 /** 점화식
@@ -47,17 +53,17 @@ console.log(dp[n].reduce((prev, cur) => (prev + cur) % MOD, 0));
 let prev2 = 3;
 let prev1 = 7;
 
-if (n === 1) {
+if (N === 1) {
   console.log(prev2);
   return;
 }
 
-if (n === 2) {
+if (N === 2) {
   console.log(prev1);
   return;
 }
 
-for (let i = 3; i <= n; i++) {
+for (let i = 3; i <= N; i++) {
   [prev2, prev1] = [prev1, (prev1 * 2 + prev2) % MOD];
 }
 
