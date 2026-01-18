@@ -1,3 +1,5 @@
+/** https://www.acmicpc.net/problem/13913 */
+
 const [seekerPosition, hiderPosition] = require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
