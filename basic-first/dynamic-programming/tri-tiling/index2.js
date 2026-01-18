@@ -1,6 +1,9 @@
-const n = +require('fs')
+/** https://www.acmicpc.net/problem/2133 */
+
+const N = +require('fs')
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
-  .toString();
+  .toString()
+  .trim();
 
 /**
  * O(n) 풀이법
@@ -16,7 +19,7 @@ const n = +require('fs')
  * accSum 변수로 누적해서 O(n)으로 계산하는 방식
  */
 
-if (n % 2 !== 0) {
+if (N % 2 !== 0) {
   console.log(0);
   return;
 }
@@ -27,9 +30,9 @@ dp[2] = 3;
 
 let accSum = dp[0];
 
-for (let i = 4; i <= n; i += 2) {
+for (let i = 4; i <= N; i += 2) {
   dp[i] = dp[i - 2] * 3 + accSum * 2;
   accSum += dp[i - 2];
 }
 
-console.log(dp[n]);
+console.log(dp[N]);

@@ -1,4 +1,9 @@
-const input = +require('fs').readFileSync('input.txt').toString();
+/** https://www.acmicpc.net/problem/2133 */
+
+const N = +require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim();
 
 /**
  * 점화식 계산
@@ -63,15 +68,15 @@ const input = +require('fs').readFileSync('input.txt').toString();
  * -> dp[n] = caseOfTwo * dp[n - 2] + caseOfSpecialTile * (dp[n - 4] + dp[n - 6] + .... dp[0])
  */
 
-if (input % 2 !== 0) {
+if (N % 2 !== 0) {
   console.log(0);
   return;
 }
 
-const dp = Array(input + 1).fill(0);
+const dp = Array(N + 1).fill(0);
 dp[2] = 3;
 
-for (let i = 4; i <= input; i += 2) {
+for (let i = 4; i <= N; i += 2) {
   dp[i] = dp[i - 2] * 3;
 
   for (let j = 4; j <= i; j += 2) {
@@ -83,4 +88,4 @@ for (let i = 4; i <= input; i += 2) {
   }
 }
 
-console.log(dp[input]);
+console.log(dp[N]);
