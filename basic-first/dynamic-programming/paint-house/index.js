@@ -1,7 +1,11 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
+/** https://www.acmicpc.net/problem/1149 */
 
-const iter = Number(input.shift());
-const matrix = input.map((item) => item.split(' ').map(Number));
+const [[N], ...matrix] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /**
  * 점화식
@@ -23,7 +27,7 @@ const matrix = input.map((item) => item.split(' ').map(Number));
 
 let acc = matrix[0];
 
-for (let i = 1; i < iter; i++) {
+for (let i = 1; i < N; i++) {
   const curRow = matrix[i];
   const curMinValues = [];
 
