@@ -1,6 +1,11 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
-const iter = +input.shift();
-const sequence = input[0].split(' ').map(Number);
+/** https://www.acmicpc.net/problem/11722 */
+
+const [[N], sequence] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
+  .toString()
+  .trim()
+  .split('\n')
+  .map((line) => line.split(' ').map(Number));
 
 /** 점화식
  * 1. 가장 긴 증가하는 부분수열은 binary search로 오름차순으로 lds를 넣을 수 있었음.
@@ -26,7 +31,7 @@ const binarySearch = (target) => {
   return right;
 };
 
-for (let i = 1; i < iter; i++) {
+for (let i = 1; i < N; i++) {
   if (negativeSequence[i] > lds[lds.length - 1]) {
     lds.push(negativeSequence[i]);
   } else {
